@@ -1,4 +1,25 @@
-<html lang="zh-Hant-TW">
+<?php /* Smarty version Smarty-3.1.19, created on 2016-02-29 16:32:46
+         compiled from "View\templates\NavBar.tpl" */ ?>
+<?php /*%%SmartyHeaderCode:21597567b8603d55512-66811277%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+$_valid = $_smarty_tpl->decodeProperties(array (
+  'file_dependency' => 
+  array (
+    'bd7a8c1cdbe6ecdf8efa83346118c1c867816788' => 
+    array (
+      0 => 'View\\templates\\NavBar.tpl',
+      1 => 1456759942,
+      2 => 'file',
+    ),
+  ),
+  'nocache_hash' => '21597567b8603d55512-66811277',
+  'function' => 
+  array (
+  ),
+  'version' => 'Smarty-3.1.19',
+  'unifunc' => 'content_567b8603d84322_81212493',
+  'has_nocache_code' => false,
+),false); /*/%%SmartyHeaderCode%%*/?>
+<?php if ($_valid && !is_callable('content_567b8603d84322_81212493')) {function content_567b8603d84322_81212493($_smarty_tpl) {?><html lang="zh-Hant-TW">
     <head>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,7 +63,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mission System<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Singleplayer Mission</li><!--小類別 單人-->
-                                <li><a href="index.php?action=MissionAndPoint">Mission & Point</a></li><!--任務與計分系統-->
+                                <li><a href="index.php?action=Mission">Mission & Point</a></li><!--任務與計分系統-->
                                 <li><a href="index.php?action=Store">Shop Store</a></li><!--分數購物商店-->
                                 <li role="separator" class="divider"></li><!--分隔橫線-->
                                 <li class="dropdown-header">Multiplayer Mission</li><!--小類別 多人-->
@@ -64,4 +85,4 @@
         </nav>
 
     </body>
-</html>
+</html><?php }} ?>
