@@ -11,7 +11,7 @@ class KSmarty extends Smarty {
         $this->left_delimiter = '<{';
         $this->right_delimiter = '}>';
         
-        //$this->debugging = true;
+        $this->debugging = FALSE;
     }
 
 }

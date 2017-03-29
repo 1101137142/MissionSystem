@@ -42,6 +42,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mission System<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Singleplayer Mission</li><!--小類別 單人-->
+                                <li><a href="index.php?action=KPIMission">KPIMission</a></li><!--設立短期目標的KPI系統-->
                                 <li><a href="index.php?action=MissionAndPoint">Mission & Point</a></li><!--任務與計分系統-->
                                 <li><a href="index.php?action=Store">Shop Store</a></li><!--分數購物商店-->
                                 <li role="separator" class="divider"></li><!--分隔橫線-->
@@ -62,6 +63,9 @@
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
+        <div class="container" style="margin-top: 80px;">
+            <{$MissionContent}>
+        </div>
 
     </body>
 </html>
