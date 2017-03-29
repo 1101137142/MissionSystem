@@ -1,4 +1,29 @@
-<html lang="zh-Hant-TW">
+<?php /* Smarty version Smarty-3.1.19, created on 2017-03-29 10:39:16
+         compiled from "View\templates\NavBar.tpl" */ ?>
+<?php /*%%SmartyHeaderCode:2015058db8ed4813fc5-68811875%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+$_valid = $_smarty_tpl->decodeProperties(array (
+  'file_dependency' => 
+  array (
+    'a84188845762d6bfbcf5697dc3cc80782634c2e4' => 
+    array (
+      0 => 'View\\templates\\NavBar.tpl',
+      1 => 1490694721,
+      2 => 'file',
+    ),
+  ),
+  'nocache_hash' => '2015058db8ed4813fc5-68811875',
+  'function' => 
+  array (
+  ),
+  'variables' => 
+  array (
+    'MissionContent' => 0,
+  ),
+  'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.19',
+  'unifunc' => 'content_58db8ed4828519_11809378',
+),false); /*/%%SmartyHeaderCode%%*/?>
+<?php if ($_valid && !is_callable('content_58db8ed4828519_11809378')) {function content_58db8ed4828519_11809378($_smarty_tpl) {?><html lang="zh-Hant-TW">
     <head>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,8 +89,9 @@
             </div>
         </nav>
         <div class="container" style="margin-top: 80px;">
-            <{$MissionContent}>
+            <?php echo $_smarty_tpl->tpl_vars['MissionContent']->value;?>
+
         </div>
 
     </body>
-</html>
+</html><?php }} ?>
