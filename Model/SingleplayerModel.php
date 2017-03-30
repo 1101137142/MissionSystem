@@ -15,8 +15,8 @@ class SingleplayerModel extends Model {
         $stmt= $this->cont->prepare($sql);
         $status=$stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
     }
+    
 
 }
 
