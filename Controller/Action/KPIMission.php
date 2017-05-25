@@ -12,13 +12,22 @@ class KPIMission implements actionPerformed {
                 'MissionStatus' => $row["MissionStatus"],                
                 'MissionPeriod' => $row["MissionPeriod"]);
         }
+        $ID=1;
+        foreach ($SingleplayerModel->SelectPlayerScore($ID) as $row) {
+            $Score[] = array(
+                'Score' => $row["PlayerScore"]);
+        }
+        
+        
         
         $smarty = new KSmarty();
         if (empty($SingleplayerModel->SelectKPIMission())){
+            
+        //$smarty->assign("Score",$Score);
         return $smarty->fetch("KPIMissionNull.tpl");
         }else{
         $smarty->assign("Mission", $Mission);
-        
+        $smarty->assign("Score",$Score);
         return $smarty->fetch("KPIMission.tpl");}
     }
 
