@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/KPIMissionNull.tpl</file>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/NavBar.tpl</file>
+            <file>file:/C:/wamp64/www/MissionSystem/index.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/KPIMission.tpl</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/KPIMission.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/Model/SingleplayerModel.php</file>
