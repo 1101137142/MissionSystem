@@ -30,6 +30,12 @@ class SingleplayerModel extends Model {
         $status = $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    function CreateMission($Name,$Point,$Period) {
+        $sql = "INSERT INTO `missionsystem_missionlist`( `MissionName`, `MissionPoint`, `MissionFinishTime`,`MissionPeriod`, `MissionAttribute`, `MissionKPI`) VALUES ("+$Name+","+$Point+",CURRENT_TIMESTAMP,"+$Period+"2,1)";
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
 }
 

@@ -24,14 +24,9 @@ class KPIMission implements actionPerformed {
         
         
         $smarty = new KSmarty();
-        if (empty($SingleplayerModel->SelectKPIMission())){
-            
-        return $smarty->fetch("KPIMissionNull.tpl");
-        }else{
         $smarty->assign("Mission", $Mission);
-        
         $smarty->assign("FinishMission", $FinishMission);
-        return $smarty->fetch("KPIMission.tpl");}
+        return $smarty->fetch("KPIMission.tpl");
     }
 
 }
