@@ -33,7 +33,7 @@ class SingleplayerModel extends Model {
     }
 
     function CreateMission($Name, $Point, $Period) {
-        $sql = "INSERT INTO `missionsystem_missionlist`( `MissionName`, `MissionPoint`, `MissionFinishTime`,`MissionPeriod`, `MissionAttribute`, `MissionKPI`) VALUES (" . $Name . "," . $Point . ",CURRENT_TIMESTAMP," . $Period . ",2,1)";
+        $sql = "INSERT INTO `missionsystem_missionlist`( `MissionName`, `MissionPoint`, `MissionFinishTime`,`MissionPeriod`, `MissionAttribute`, `MissionKPI`) VALUES ('" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP," . $Period . ",2,1)";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $status;
@@ -41,7 +41,7 @@ class SingleplayerModel extends Model {
 
     function selectNewCreateMission($Name, $Point, $Period) {
         $sql = "SELECT `MissionID`,`MissionName`,`MissionPoint`,`MissionFinishQuantity`,`MissionStatus`,`MissionPeriod` FROM `missionsystem_missionlist` WHERE MissionKPI=1 and MissionName=" . $Name . " and MissionPoint=" . $Period . " and MissionPeriod=" . $Period;
-        $stmt = $this->cont->prepart($sql);
+        $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -54,7 +54,14 @@ class SingleplayerModel extends Model {
     }
 
     function DelectMission($ID) {
-        $sql = "DELETE FROM `missionsystem_missionlist` WHERE `MissionID`" . $ID ;
+        $sql = "DELETE FROM `missionsystem_missionlist` WHERE `MissionID`=" . $ID;
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
+        return $status;
+    }
+
+    function UnfinishMission($ID) {
+        $sql = "UPDATE `missionsystem_missionlist` SET `MissionFinishQuantity`=`MissionFinishQuantity`-1 ,`MissionStatus` =0 WHERE `MissionID`=" . $ID . " and `MissionStatus`=1";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $status;

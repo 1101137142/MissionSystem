@@ -16,6 +16,7 @@
         <!-- 最新編譯和最佳化的 JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+        <link rel="stylesheet" href="View/templates/Login.css">
 
 
 
@@ -60,6 +61,37 @@
                             </ul>
                         </li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                            <ul id="login-dp" class="dropdown-menu">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            Login via
+                                            <form class="form" role="form" method="post"  accept-charset="UTF-8" id="login-nav">
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="PlayerName">PlayerName</label>
+                                                    <input type="text" class="form-control" name="PlayerName" id="PlayerName" placeholder="PlayerName" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="Password">Password</label>
+                                                    <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" required>
+                                                    <div class="help-block text-right"><a href="">Forget the password ?</a></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            New here ? <a href="#"><b>Join Us</b></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
@@ -69,3 +101,28 @@
 
     </body>
 </html>
+
+
+<script>
+
+            $("#login-nav").submit(function (e) {
+                var url = "Controller/Action/doLogin.php"; // the script where you handle the form input.
+                //var url = "Controller/Action/createMission.php";
+                //console.log($("#createMissionForm").serialize());
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $("#login-nav").serialize(), // serializes the form's elements.
+                    success: function (data)
+                    {
+                        alert(data);
+                        
+                    },
+                    error: function (data) {
+                        console.log('An error occurred.');
+                        console.log(data);
+                    }
+                });
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+            })
+</script>
