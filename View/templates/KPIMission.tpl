@@ -122,13 +122,11 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
 <script>
-
             $("#createMissionForm").submit(function (e) {
                 var url = "index.php?action=createMission"; // the script where you handle the form input.
                 //var url = "Controller/Action/createMission.php";

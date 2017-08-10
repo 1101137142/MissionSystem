@@ -1,4 +1,5 @@
 <html lang="zh-Hant-TW">
+    <title>My Mission System</title>
     <head>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,12 +18,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
         <link rel="stylesheet" href="View/templates/Login.css">
-
-
-
     </head>
-    <body>
+    
     <body role="document">
+        
 
         <!-- Fixed navbar -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -43,9 +42,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mission System<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Singleplayer Mission</li><!--小類別 單人-->
-                                <li><a href="index.php?action=KPIMission">KPIMission</a></li><!--設立短期目標的KPI系統-->
-                                <li><a href="index.php?action=MissionAndPoint">Mission & Point</a></li><!--任務與計分系統-->
-                                <li><a href="index.php?action=Store">Shop Store</a></li><!--分數購物商店-->
+                                <li><a href="index.php?action=Homepage&Content=KPIMission">KPIMission</a></li><!--設立短期目標的KPI系統-->
+                                <li><a href="index.php?action=Homepage&Content=MissionAndPoint">Mission & Point</a></li><!--任務與計分系統-->
+                                <li><a href="index.php?action=Homepage&Content=Store">Shop Store</a></li><!--分數購物商店-->
                                 <li role="separator" class="divider"></li><!--分隔橫線-->
                                 <li class="dropdown-header">Multiplayer Mission</li><!--小類別 多人-->
                                 <li><a href="#">Mission & Point</a></li><!--任務與計分系統-->
@@ -77,6 +76,7 @@
                                                 <div class="form-group">
                                                     <label class="sr-only" for="Password">Password</label>
                                                     <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" required>
+                                                    
                                                     <div class="help-block text-right"><a href="">Forget the password ?</a></div>
                                                 </div>
                                                 <div class="form-group">
@@ -106,7 +106,7 @@
 <script>
 
             $("#login-nav").submit(function (e) {
-                var url = "Controller/Action/doLogin.php"; // the script where you handle the form input.
+                var url = "index.php?action=doLogin"; // the script where you handle the form input.
                 //var url = "Controller/Action/createMission.php";
                 //console.log($("#createMissionForm").serialize());
                 $.ajax({

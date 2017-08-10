@@ -16,12 +16,9 @@ require_once $VIEW."/KSmarty.php";
 $CONTROLLER="Controller";
 require_once $CONTROLLER.'/Controller.php';
 $Controller=new Controller($Event);
-$MissionContent=$Controller->doAction();
+$Controller->doAction();
 
 
-$smarty = new KSmarty();
-$smarty->assign("MissionContent", $MissionContent);
-$smarty->display("NavBar.tpl");
 
 
 
