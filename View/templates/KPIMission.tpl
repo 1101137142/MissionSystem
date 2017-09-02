@@ -20,7 +20,7 @@
             $.ajax({
                 type: "POST",
                 url: url,
-                data: { MissionID: ID}, // serializes the form's elements.
+                data: {MissionID: ID}, // serializes the form's elements.
                 success: function (data)
                 {
                     alert("已變更任務狀態")
@@ -38,9 +38,10 @@
         $.ajax({
             type: "POST",
             url: url,
-            data: { MissionID: ID}, // serializes the form's elements.
+            data: {MissionID: ID}, // serializes the form's elements.
             success: function (data)
-            { console.log(data);
+            {
+                console.log(data);
                 alert("已刪除任務");
                 window.location.reload();
             },
@@ -58,7 +59,7 @@
             $.ajax({
                 type: "POST",
                 url: url,
-                data: { MissionID: ID}, // serializes the form's elements.
+                data: {MissionID: ID}, // serializes the form's elements.
                 success: function (data)
                 {
                     alert("已變更任務狀態");
@@ -71,7 +72,7 @@
             });
         }
     }
-    
+
 
 
 </script>
@@ -113,7 +114,13 @@
                         <table class="table">
                             <tr><td>任務名稱：</td><td><input type="text" name="MissionName" ID="MissionName"></td></tr>
                             <tr><td>任務分數：</td><td><input type="number" name="MissionPoint" ID="MissionPoint"></td></tr>
-                            <tr><td>任務週期：</td><td><input type="number" name="MissionPeriod" ID="MissionPeriod">小時</td></tr>
+                            <tr><td>任務週期：</td><td><input type="number" name="MissionPeriod" ID="MissionPeriod">
+                                    <select name="YourLocation" class="form-control" style="display: inline;width: 30%;">
+                                        <option value="1">小時</option>
+                                        <option value="2">天</option>
+                                        <option value="3">月</option>
+                                        <option value="4">年</option>
+                                    </select></td></tr>
                         </table>
                         <button type="submit" class="btn btn-success"  id="submitForm">送出</button>
                     </form>
@@ -127,23 +134,23 @@
 </div>
 
 <script>
-            $("#createMissionForm").submit(function (e) {
-                var url = "index.php?action=createMission"; // the script where you handle the form input.
-                //var url = "Controller/Action/createMission.php";
-                //console.log($("#createMissionForm").serialize());
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: $("#createMissionForm").serialize(), // serializes the form's elements.
-                    success: function (data){
-                        console.log(data);
-                        //$("#NotFinishTable").append("<tr ><td align=center ></td><td></td><td></td><td ></td><td id=MS<{$smarty.foreach.Mission.iteration}>></td><td></td><td align=center><button id=Bt type=button class=btn btn-success onclick=FinishMission(<{$item.MissionID}>,<{$item.MissionStatus}>)>完成</button></td></tr>")
-                    },
-                    error: function (data) {
-                        console.log('An error occurred.');
-                        console.log(data);
-                    }
-                });
-                e.preventDefault(); // avoid to execute the actual submit of the form.
-            })
+    $("#createMissionForm").submit(function (e) {
+        var url = "index.php?action=createMission"; // the script where you handle the form input.
+        //var url = "Controller/Action/createMission.php";
+        //console.log($("#createMissionForm").serialize());
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#createMissionForm").serialize(), // serializes the form's elements.
+            success: function (data) {
+                console.log(data);
+                //$("#NotFinishTable").append("<tr ><td align=center ></td><td></td><td></td><td ></td><td id=MS<{$smarty.foreach.Mission.iteration}>></td><td></td><td align=center><button id=Bt type=button class=btn btn-success onclick=FinishMission(<{$item.MissionID}>,<{$item.MissionStatus}>)>完成</button></td></tr>")
+            },
+            error: function (data) {
+                console.log('An error occurred.');
+                console.log(data);
+            }
+        });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    })
 </script>

@@ -3,29 +3,29 @@
 class KPIMission implements actionPerformed {
     public function actionPerformed($event) {
         $SingleplayerModel=new SingleplayerModel();
-        foreach ($SingleplayerModel->SelectKPIMission() as $row) {
+        foreach ($SingleplayerModel->SelectKPIMission() as $rowM) {
             $Mission[] = array(
-                'MissionID' => $row["MissionID"],
-                'MissionName' => $row["MissionName"],
-                'MissionPoint' => $row["MissionPoint"],
-                'MissionFinishQuantity' => $row["MissionFinishQuantity"],
-                'MissionStatus' => $row["MissionStatus"],                
-                'MissionPeriod' => $row["MissionPeriod"]);
+                'MissionID' => $rowM["MissionID"],
+                'MissionName' => $rowM["MissionName"],
+                'MissionPoint' => $rowM["MissionPoint"],
+                'MissionFinishQuantity' => $rowM["MissionFinishQuantity"],
+                'MissionStatus' => $rowM["MissionStatus"],                
+                'MissionPeriod' => $rowM["MissionPeriod"]);
         }
-        foreach ($SingleplayerModel->SelectFinishKPIMission() as $row) {
+        foreach ($SingleplayerModel->SelectFinishKPIMission() as $rowFM) {
             $FinishMission[] = array(
-                'MissionID' => $row["MissionID"],
-                'MissionName' => $row["MissionName"],
-                'MissionPoint' => $row["MissionPoint"],
-                'MissionFinishQuantity' => $row["MissionFinishQuantity"],
-                'MissionStatus' => $row["MissionStatus"],                
-                'MissionPeriod' => $row["MissionPeriod"]);
+                'MissionID' => $rowFM["MissionID"],
+                'MissionName' => $rowFM["MissionName"],
+                'MissionPoint' => $rowFM["MissionPoint"],
+                'MissionFinishQuantity' => $rowFM["MissionFinishQuantity"],
+                'MissionStatus' => $rowFM["MissionStatus"],                
+                'MissionPeriod' => $rowFM["MissionPeriod"]);
         }
         
         
         $smarty = new KSmarty();
-        $smarty->assign("Mission", $Mission);
-        $smarty->assign("FinishMission", $FinishMission);
+        @$smarty->assign("Mission", $Mission);
+        @$smarty->assign("FinishMission", $FinishMission);
         return $smarty->fetch("KPIMission.tpl");
     }
 
