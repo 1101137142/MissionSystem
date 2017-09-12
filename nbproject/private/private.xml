@@ -6,10 +6,13 @@
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/UnfinishMission.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/NavBar.tpl</file>
             <file>file:/C:/wamp64/www/MissionSystem/index.php</file>
+            <file>file:/C:/wamp64/www/MissionSystem/Model/Model.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/KPIMission.tpl</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/MissionAndPoint.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/doLogin.php</file>
+            <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/KPIMission.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/Homepage.php</file>
+            <file>file:/C:/wamp64/www/MissionSystem/Controller/Controller.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/createMission.php</file>
         </group>
     </open-files>

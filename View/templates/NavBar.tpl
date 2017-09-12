@@ -19,9 +19,9 @@
 
         <link rel="stylesheet" href="View/templates/Login.css">
     </head>
-    
+
     <body role="document">
-        
+
 
         <!-- Fixed navbar -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -61,7 +61,7 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
+                        <li id="loginli" class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
                             <ul id="login-dp" class="dropdown-menu">
                                 <li>
@@ -76,7 +76,7 @@
                                                 <div class="form-group">
                                                     <label class="sr-only" for="Password">Password</label>
                                                     <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" required>
-                                                    
+
                                                     <div class="help-block text-right"><a href="">Forget the password ?</a></div>
                                                 </div>
                                                 <div class="form-group">
@@ -95,6 +95,34 @@
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
+        <div id="ChangePassword" class="modal inmodal fade"  tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+            <div class="modal-dialog modal-sm" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                        <div class="modal-title ">
+                            變更密碼 ChangePassword
+                        </div>
+                    </div>
+                    <form class="form" role="form" method="post"  accept-charset="UTF-8" id="ChangePasswordForm">
+                        <div class="modal-body" >
+                            <label class="sr-only" for="Password">舊密碼 Password</label>
+                            <input type="text" class="form-control" name="Password" id="Password" placeholder="舊密碼 Password" required>
+                            <label class="sr-only" for="NewPassword">新密碼 New Password</label>
+                            <input type="text" class="form-control" name="NewPassword" id="NewPassword" placeholder="新密碼 New Password" required>
+                            <label class="sr-only" for="RetypeNewPassword">重新輸入新密碼 Retype New Password</label>
+                            <input type="text" class="form-control"  name="RetypeNewPassword" id="RetypeNewPassword" placeholder="重新輸入新密碼 Retype New Password" required>
+                        </div>
+                        <div class="modal-footer" >
+                            <button class="btn">OK</button>
+                            <button class="btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="container" style="margin-top: 80px;">
             <{$MissionContent}>
         </div>
@@ -104,25 +132,45 @@
 
 
 <script>
+    if ("<{$PlayerName}>" != "!NotToLogin") {
+        var HTML = '<a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello ';
+        HTML += "<{$PlayerName}>";
+        HTML += '<span class="caret"></span></a><ul class="dropdown-menu">';
+        HTML += '<li><a href="#" data-toggle="modal" data-target="#ChangePassword">Change Password</a></li>';
+        HTML += '<li><a href="#">My Profile</a></li></ul>';
+        $('#loginli').html(HTML);
+    }
+    $("#login-nav").submit(function (e) {
+        var url = "index.php?action=doLogin"; // the script where you handle the form input.
+        //var url = "Controller/Action/createMission.php";
+        //console.log($("#createMissionForm").serialize());
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#login-nav").serialize(), // serializes the form's elements.
+            dataType: "json",
+            success: function (data)
+            {
+                if (data['0']['PlayerID'] == '-1') {
+                    alert("登入失敗");
+                    //console.log(data);
+                } else {
 
-            $("#login-nav").submit(function (e) {
-                var url = "index.php?action=doLogin"; // the script where you handle the form input.
-                //var url = "Controller/Action/createMission.php";
-                //console.log($("#createMissionForm").serialize());
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: $("#login-nav").serialize(), // serializes the form's elements.
-                    success: function (data)
-                    {
-                        alert(data);
-                        
-                    },
-                    error: function (data) {
-                        console.log('An error occurred.');
-                        console.log(data);
-                    }
-                });
-                e.preventDefault(); // avoid to execute the actual submit of the form.
-            })
+                    var HTML = '<a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello ';
+                    HTML += data['0']['PlayerName'];
+                    HTML += '<span class="caret"></span></a><ul class="dropdown-menu">';
+                    HTML += '<li><a href="#">Change Password</a></li>';
+                    HTML += '<li><a href="#">My Profile</a></li></ul>';
+                    $('#loginli').html(HTML);
+                }
+
+
+            },
+            error: function (data) {
+                console.log('An error occurred.');
+                console.log(data);
+            }
+        });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    })
 </script>

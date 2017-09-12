@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once './Event.php';
 $Event=new Event($_GET, $_POST);
 

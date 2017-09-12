@@ -16,11 +16,11 @@
         if (Status == 1) {
             alert("此任務已經完成了");
         } else {
-            var url = "index.php?action=FinishMission";
+            var url = "index.php?action=MissionAction";
             $.ajax({
                 type: "POST",
                 url: url,
-                data: {MissionID: ID}, // serializes the form's elements.
+                data: {MissionID: ID,doAction:'Finish'}, // serializes the form's elements.
                 success: function (data)
                 {
                     alert("已變更任務狀態")
@@ -34,11 +34,11 @@
         }
     }
     function DelectMission(ID) {
-        var url = "index.php?action=DelectMission";
+        var url = "index.php?action=MissionAction";
         $.ajax({
             type: "POST",
             url: url,
-            data: {MissionID: ID}, // serializes the form's elements.
+            data: {MissionID: ID,doAction:'Delect'}, // serializes the form's elements.
             success: function (data)
             {
                 console.log(data);
@@ -55,11 +55,11 @@
         if (Status == 0) {
             alert("此任務處於未完成的狀態");
         } else {
-            var url = "index.php?action=UnfinishMission";
+            var url = "index.php?action=MissionAction";
             $.ajax({
                 type: "POST",
                 url: url,
-                data: {MissionID: ID}, // serializes the form's elements.
+                data: {MissionID: ID,doAction:'Unfinish'}, // serializes the form's elements.
                 success: function (data)
                 {
                     alert("已變更任務狀態");

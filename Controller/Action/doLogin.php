@@ -14,12 +14,17 @@ class doLogin implements actionPerformed {
                 'PlayerPassword' => $row["PlayerPassword"],
                 'PlayerScore' => $row["PlayerScore"]);
         }
-        if (empty($Player)) {
-            echo '0';
+        //如果使用者存在
+        if (!empty($Player)) {
+            $_SESSION['PlayerID'] = $Player['0']['PlayerID'];
+            $_SESSION['PlayerName'] = $Player['0']['PlayerName'];
+            echo json_encode($Player);
         } else {
-            echo '1';
+            $Player['0']['PlayerID'] = '-1';
+            echo json_encode($Player);
         }
     }
 
 }
+
 ?>
