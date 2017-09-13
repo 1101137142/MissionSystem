@@ -155,7 +155,6 @@
                     alert("登入失敗");
                     //console.log(data);
                 } else {
-
                     var HTML = '<a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello ';
                     HTML += data['0']['PlayerName'];
                     HTML += '<span class="caret"></span></a><ul class="dropdown-menu">';

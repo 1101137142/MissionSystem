@@ -1,17 +1,4 @@
 <script>
-    function test() {
-        alert('OK!');
-    }
-    function TorF(ID, Status) {
-        if (Status == 1) {
-            document.getElementById('Bt' + ID).className += " disabled";
-        } else
-        {
-            document.getElementById('Bt' + ID).removeAttribute('class');
-            document.getElementById('Bt' + ID).className = 'btn btn-success';
-        }
-        //    document.location.href = "";
-    }
     function FinishMission(ID, Status) {
         if (Status == 1) {
             alert("此任務已經完成了");
