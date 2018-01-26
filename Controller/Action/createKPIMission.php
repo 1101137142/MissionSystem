@@ -1,6 +1,6 @@
 <?php
 
-class createMission implements actionPerformed {
+class createKPIMission implements actionPerformed {
 
     public function actionPerformed($event) {
         
@@ -12,9 +12,9 @@ class createMission implements actionPerformed {
             $Point = $_POST["MissionPoint"];
             $Period = $_POST["MissionPeriod"];
             $MissionEndTime = $_POST['MissionEndTime'];
-            $MissionAttribute=$_POST['MissionAttribute'];
+            //$MissionAttribute=$_POST['MissionAttribute'];
             $MissionPeriodList=$_POST['MissionPeriodList'];
-            foreach($SingleplayerModel->CreateMission($Name, $Point, $Period,$MissionEndTime,$MissionAttribute,$MissionPeriodList) as $row){
+            foreach($SingleplayerModel->CreateMission($Name, $Point, $Period,$MissionEndTime,'1',$MissionPeriodList) as $row){
                 $NewMission[] = array(
                     'MissionID'=>$row["MissionID"],
                     'MissionName'=>$row["MissionName"],

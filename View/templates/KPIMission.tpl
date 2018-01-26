@@ -109,7 +109,7 @@
                                         <option value="4">年</option>
                                     </select></td></tr>
                             <tr><td>任務結束時間 (選填) ：</td><td><input type="datetime-local" name="MissionEndTime" ID="MissionEndTime"></td></tr>
-                            <input type="hidden" name="MissionAttribute" ID="MissionAttribute" value="1">
+                            <!-- <input type="hidden" name="MissionAttribute" ID="MissionAttribute" value="1"> -->
                         </table>
                         <button type="submit" class="btn btn-success"  id="submitForm">送出</button>
                     </form>
@@ -125,7 +125,7 @@
 <script>
     $("#createMissionForm").submit(function (e) {
 
-        var url = "index.php?action=createMission"; // the script where you handle the form input.
+        var url = "index.php?action=createKPIMission"; // the script where you handle the form input.
         //var url = "Controller/Action/createMission.php";
         //console.log($("#createMissionForm").serialize());
         $.ajax({
