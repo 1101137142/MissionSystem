@@ -27,20 +27,48 @@ class SingleplayerModel extends Model {
     function SelectPlayerScore($ID) {
         $sql = "SELECT `PlayerScore` FROM `missionsystem_players` WHERE PlayerID=?";
         $stmt = $this->cont->prepare($sql);
-        $count = $stmt->execute(array($ID));
-        $status = $stmt->execute();
+        $status = $stmt->execute(array($ID));
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    function CreateMission($Name, $Point, $Period) {
-        $sql = "INSERT INTO `missionsystem_missionlist`( `MissionName`, `MissionPoint`, `MissionFinishTime`,`MissionPeriod`, `MissionAttribute`, `MissionKPI`) VALUES ('" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP," . $Period . ",2,1)";
-        $stmt = $this->cont->prepare($sql);
-        $status = $stmt->execute();
-        return $status;
+    function CreateMission($Name, $Point, $Period,$EndTime,$MissionAttribute,$MissionPeriodList) {
+        if($EndTime!=''){
+            $EndTime="'".$EndTime."'";
+        }else{
+            $EndTime='NULL';
+        }
+        try{
+            $this->cont->beginTransaction();
+            $sql = "SELECT MAX(MissionID)+1 as MissionID FROM `missionsystem_missionlist`";
+            $stmt = $this->cont->prepare($sql);
+            $status = $stmt->execute();
+            $result=$stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $MissionID=$result['MissionID'];
+            
+            
+            $sqlx = "INSERT INTO `missionsystem_missionlist`( `MissionID`,`MissionName`, `MissionPoint`, `MissionCreateTime`,`MissionEndTime`,`MissionPeriod`,`MissionPeriodList`, `MissionAttribute`,`MissionCreater`) VALUES ('".$MissionID."','" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP,".$EndTime.",'" . $Period . "','".$MissionPeriodList."','".$MissionAttribute."',".$_SESSION['PlayerID'].")";
+            $stmtx = $this->cont->prepare($sqlx);
+            $statusx = $stmtx->execute();
+            $sqly = "INSERT INTO `missionsystem_finishstatus`( `MissionID`, `Owner`) VALUES ('".$MissionID."','".$_SESSION['PlayerID']."')";
+            $stmty = $this->cont->prepare($sqly);
+            $statusy = $stmty->execute();
+            $this->cont->commit();
+            
+            $sqls="SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T1.`MissionEndTime`,T1.MissionPeriod,T2.`LastFinishTime`,T2.`FinishQuantity`,T2.`Status` FROM `missionsystem_missionlist` T1 LEFT JOIN `missionsystem_finishstatus` T2 on T1.MissionID=T2.MissionID WHERE T1.`MissionID`=:MissionID  AND T2.`Owner`=:Owner";
+            $stmts = $this->cont->prepare($sqls);
+            $statuss = $stmts->execute(array(':MissionID' => $MissionID,':Owner'=>$_SESSION['PlayerID']));
+            
+            return $stmts;
+        } catch (Exception $e){
+            $this->cont->rollback();
+            return 'ERR';
+        }
+        
     }
 
     function selectNewCreateMission($Name, $Point, $Period) {
-        $sql = "SELECT `MissionID`,`MissionName`,`MissionPoint`,`MissionFinishQuantity`,`MissionStatus`,`MissionPeriod` FROM `missionsystem_missionlist` WHERE MissionKPI=1 and MissionName=" . $Name . " and MissionPoint=" . $Period . " and MissionPeriod=" . $Period;
+        $sql = "SELECT `MissionID`,`MissionName`,`MissionPoint`,`MissionFinishQuantity`,`MissionStatus`,`MissionPeriod` FROM `missionsystem_missionlist` WHERE MissionKPI=1 and MissionName=" . $Name . " and MissionPoint=" . $Point . " and MissionPeriod=" . $Period;
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);

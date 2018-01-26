@@ -102,12 +102,14 @@
                             <tr><td>任務名稱：</td><td><input type="text" name="MissionName" ID="MissionName"></td></tr>
                             <tr><td>任務分數：</td><td><input type="number" name="MissionPoint" ID="MissionPoint"></td></tr>
                             <tr><td>任務週期：</td><td><input type="number" name="MissionPeriod" ID="MissionPeriod">
-                                    <select name="YourLocation" class="form-control" style="display: inline;width: 30%;">
+                                    <select ID="MissionPeriodList" name="MissionPeriodList" class="form-control" style="display: inline;width: 30%;">
                                         <option value="1">小時</option>
                                         <option value="2">天</option>
                                         <option value="3">月</option>
                                         <option value="4">年</option>
                                     </select></td></tr>
+                            <tr><td>任務結束時間 (選填) ：</td><td><input type="datetime-local" name="MissionEndTime" ID="MissionEndTime"></td></tr>
+                            <input type="hidden" name="MissionAttribute" ID="MissionAttribute" value="1">
                         </table>
                         <button type="submit" class="btn btn-success"  id="submitForm">送出</button>
                     </form>
@@ -122,18 +124,26 @@
 
 <script>
     $("#createMissionForm").submit(function (e) {
+
         var url = "index.php?action=createMission"; // the script where you handle the form input.
         //var url = "Controller/Action/createMission.php";
         //console.log($("#createMissionForm").serialize());
         $.ajax({
             type: "POST",
             url: url,
+            dataType: 'json',
             data: $("#createMissionForm").serialize(), // serializes the form's elements.
             success: function (data) {
                 console.log(data);
+                if (data['Returnmsg'] == 'Not Login') {
+                    alert('您尚未登入');
+                } else {
+                    alert('您建立了一個序號為' + data[0]['MissionID'] + '的' + data[0]['MissionName'] + '任務');
+                }
                 //$("#NotFinishTable").append("<tr ><td align=center ></td><td></td><td></td><td ></td><td id=MS<{$smarty.foreach.Mission.iteration}>></td><td></td><td align=center><button id=Bt type=button class=btn btn-success onclick=FinishMission(<{$item.MissionID}>,<{$item.MissionStatus}>)>完成</button></td></tr>")
             },
             error: function (data) {
+
                 console.log('An error occurred.');
                 console.log(data);
             }

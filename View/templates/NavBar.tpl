@@ -109,7 +109,7 @@
                     <form class="form" role="form" method="post"  accept-charset="UTF-8" id="ChangePasswordForm">
                         <div class="modal-body" >
                             <label class="sr-only" for="Password">舊密碼 Password</label>
-                            <input type="text" class="form-control" name="Password" id="Password" placeholder="舊密碼 Password" required>
+                            <input type="text" class="form-control" name="OldPassword" id="OldPassword" placeholder="舊密碼 Old Password" required>
                             <label class="sr-only" for="NewPassword">新密碼 New Password</label>
                             <input type="text" class="form-control" name="NewPassword" id="NewPassword" placeholder="新密碼 New Password" required>
                             <label class="sr-only" for="RetypeNewPassword">重新輸入新密碼 Retype New Password</label>
@@ -151,6 +151,7 @@
             dataType: "json",
             success: function (data)
             {
+                
                 if (data['0']['PlayerID'] == '-1') {
                     alert("登入失敗");
                     //console.log(data);
