@@ -68,22 +68,34 @@
 
 <div style="clear:both;">
 
-    <table class="table table-hover" ID="NotFinishTable">
-        <tr ><td colspan="2">未完成任務</td><td align=right colspan="5"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#createMission">新增任務</button></td></tr>
-        <tr><td align=center>ID</td><td>Name</td><td>Point</td><td>MissionFinishQuantity</td><td>MissionStatus</td><td>MissionPeriod</td><td></td></tr>
-        <{foreach key=key item=item from=$Mission name=Mission}>
-        <tr ><td align=center ><{$item.MissionID}></td><td><{$item.MissionName}></td><td><{$item.MissionPoint}></td><td ><{$item.MissionFinishQuantity}></td><td id="MS<{$smarty.foreach.Mission.iteration}>"><{$item.MissionStatus}></td><td><{$item.MissionPeriod}></td><td align=center><button id="FinishBt<{$item.MissionID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item.MissionID}>,<{$item.MissionStatus}>)>完成</button><button id="DelectBt<{$item.MissionID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item.MissionID}>)>刪除</button></td></tr>
+    <!--<table class="table table-hover" ID="NotFinishTable">-->
+    <table class="table table-hover" ID="MissionTable">
+        <tr ><td colspan="2">未完成任務</td><td align=right colspan="7"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#createMission">新增任務</button></td></tr>
+        <tr><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>循環週期</td><td align=center>上次完成時間</td><td align=center>任務結束時間</td><td align=center>任務完成次數</td><td align=center>功能鍵</td></tr>
+        <{foreach key=key item=item from=$ProcessingMission name=ProcessingMission}>
+        <tr ><td align=center ><{$item.MissionID}></td><td align=center><{$item.RowID}></td><td align=center><{$item.MissionName}></td><td align=center><{$item.MissionPoint}></td>
+            <td align=center><{$item.MissionPeriod}><{$item.MissionPeriodList}></td><td align=center><{$item.LastFinishTime}></td>
+            <td align=center><{$item.MissionEndTime}></td><td align=center><{$item.FinishQuantity}></td>
+            <td align=center>
+                <button id="FinishBt<{$item.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item.RowID}>)>完成</button><button id="DelectBt<{$item.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item.RowID}>)>刪除</button>
+            </td></tr>
         <{foreachelse}>
-        <tr><td align=center colspan="7">當前沒有任務哦 請先建立任務</td></tr>
+        <tr><td align=center colspan="9">當前沒有任務哦 請先建立任務</td></tr>
         <{/foreach}>
-    </table>
-    <table class="table table-hover" ID="FinishTable">
-        <tr ><td colspan="2">已完成任務</td><td align=right colspan="5"><button type="button" class="btn btn-success disabled">已完成任務</button></td></tr>
-        <tr><td align=center>ID</td><td>Name</td><td>Point</td><td>MissionFinishQuantity</td><td>MissionStatus</td><td>MissionPeriod</td><td></td></tr>
+    <!--</table>
+    <table class="table table-hover" ID="FinishTable">-->
+        <tr ><td colspan="2">已完成任務</td><td align=right colspan="7"><button type="button" class="btn btn-success disabled">已完成任務</button></td></tr>
+        <tr><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>循環週期</td><td align=center>上次完成時間</td><td align=center>任務結束時間</td><td align=center>任務完成次數</td><td align=center>功能鍵</td></tr>
         <{foreach key=key item=item2 from=$FinishMission name=FinishMission}>
-        <tr ><td align=center ><{$item2.MissionID}></td><td><{$item2.MissionName}></td><td><{$item2.MissionPoint}></td><td ><{$item2.MissionFinishQuantity}></td><td id="MS<{$smarty.foreach.Mission.iteration}>"><{$item2.MissionStatus}></td><td><{$item2.MissionPeriod}></td><td align=center><button id="UnfinishBt<{$item2.MissionID}>" type="button" class="btn btn-warning" onclick=UnfinishMission(<{$item2.MissionID}>,<{$item2.MissionStatus}>)>取消</button><button id="DelectBt<{$item2.MissionID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item2.MissionID}>)>刪除</button></td></tr>
+        <tr ><td align=center ><{$item.MissionID}></td><td align=center><{$item.RowID}></td><td><{$item2.MissionName}></td><td><{$item2.MissionPoint}></td>
+            <td><{$item2.MissionPeriod}><{$item2.MissionPeriodList}></td><td><{$item2.LastFinishTime}></td>
+            <td><{$item2.MissionEndTime}></td><td><{$item2.FinishQuantity}></td>
+            <td align=center>
+                <button id="FinishBt<{$item2.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item2.RowID}>)>完成</button>
+                <button id="DelectBt<{$item2.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item2.RowID}>)>刪除</button>
+            </td></tr>
         <{foreachelse}>
-        <tr><td align=center colspan="7">當前沒有已完成任務哦</td></tr>
+        <tr><td align=center colspan="9">當前沒有已完成任務哦</td></tr>
         <{/foreach}>
     </table>
 

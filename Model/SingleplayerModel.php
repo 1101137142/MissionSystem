@@ -11,7 +11,11 @@ class SingleplayerModel extends Model {
     }
 
     function SelectKPIMission() {
-        $sql = "SELECT `MissionID`,`MissionName`,`MissionPoint`,`MissionFinishQuantity`,`MissionStatus`,`MissionPeriod` FROM `missionsystem_missionlist` WHERE MissionKPI=1 and MissionStatus=0";
+        $sql = "SELECT T1.`MissionID`,T1.MissionName,T1.MissionPoint,T1.MissionEndTime,T1.`MissionPeriod`,T1.`MissionPeriodList`,
+            T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T2.Status
+            FROM `missionsystem_missionlist` T1 
+                LEFT JOIN `missionsystem_finishstatus` T2 ON T1.MissionID=T2.MissionID 
+            WHERE T2.owner='2'";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

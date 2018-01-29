@@ -1,33 +1,60 @@
 <?php
 
 class KPIMission implements actionPerformed {
+
     public function actionPerformed($event) {
-        $SingleplayerModel=new SingleplayerModel();
-        foreach ($SingleplayerModel->SelectKPIMission() as $rowM) {
-            $Mission[] = array(
-                'MissionID' => $rowM["MissionID"],
-                'MissionName' => $rowM["MissionName"],
-                'MissionPoint' => $rowM["MissionPoint"],
-                'MissionFinishQuantity' => $rowM["MissionFinishQuantity"],
-                'MissionStatus' => $rowM["MissionStatus"],                
-                'MissionPeriod' => $rowM["MissionPeriod"]);
+        $SingleplayerModel = new SingleplayerModel();
+        foreach ($SingleplayerModel->SelectKPIMission() as $row) {
+            switch ($row['Status']) {
+                case 0:
+                    $ProcessingMission[] = array(
+                        'MissionID' => $row['MissionID'],
+                        'MissionName' => $row['MissionName'],
+                        'MissionPoint' => $row['MissionPoint'],
+                        'MissionEndTime' => $row['MissionEndTime'],
+                        'MissionPeriod' => $row['MissionPeriod'],
+                        'MissionPeriodList' => $row["MissionPeriodList"],
+                        'RowID' => $row['RowID'],
+                        'LastFinishTime' => $row['LastFinishTime'],
+                        'FinishQuantity' => $row['FinishQuantity']);
+                    break;
+                case 1:
+                    $FinishMission[] = array(
+                        'MissionID' => $row['MissionID'],
+                        'MissionName' => $row['MissionName'],
+                        'MissionPoint' => $row['MissionPoint'],
+                        'MissionEndTime' => $row['MissionEndTime'],
+                        'MissionPeriod' => $row['MissionPeriod'],
+                        'MissionPeriodList' => $row["MissionPeriodList"],
+                        'RowID' => $row['RowID'],
+                        'LastFinishTime' => $row['LastFinishTime'],
+                        'FinishQuantity' => $row['FinishQuantity']);
+                    break;
+                case 2:
+                    $EndMission[] = array(
+                        'MissionID' => $row['MissionID'],
+                        'MissionName' => $row['MissionName'],
+                        'MissionPoint' => $row['MissionPoint'],
+                        'MissionEndTime' => $row['MissionEndTime'],
+                        'MissionPeriod' => $row['MissionPeriod'],
+                        'MissionPeriodList' => $row["MissionPeriodList"],
+                        'RowID' => $row['RowID'],
+                        'LastFinishTime' => $row['LastFinishTime'],
+                        'FinishQuantity' => $row['FinishQuantity']);
+                    break;
+                default :
+                    break;
+            }
         }
-        foreach ($SingleplayerModel->SelectFinishKPIMission() as $rowFM) {
-            $FinishMission[] = array(
-                'MissionID' => $rowFM["MissionID"],
-                'MissionName' => $rowFM["MissionName"],
-                'MissionPoint' => $rowFM["MissionPoint"],
-                'MissionFinishQuantity' => $rowFM["MissionFinishQuantity"],
-                'MissionStatus' => $rowFM["MissionStatus"],                
-                'MissionPeriod' => $rowFM["MissionPeriod"]);
-        }
-        
-        
+
+
         $smarty = new KSmarty();
-        @$smarty->assign("Mission", $Mission);
+        @$smarty->assign("ProcessingMission", $ProcessingMission);
         @$smarty->assign("FinishMission", $FinishMission);
+        @$smarty->assign("EndMission", $EndMission);
         return $smarty->fetch("KPIMission.tpl");
     }
 
 }
+
 ?>
