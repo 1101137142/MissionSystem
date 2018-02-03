@@ -5,6 +5,23 @@ class KPIMission implements actionPerformed {
     public function actionPerformed($event) {
         $SingleplayerModel = new SingleplayerModel();
         foreach ($SingleplayerModel->SelectKPIMission() as $row) {
+            switch ($row["MissionPeriodList"]) {
+                            case '1':
+                                $MissionPerioList='小時';
+                                break;
+                            case '2':
+                                $MissionPerioList='天';
+                                break;
+                            case '3':
+                                $MissionPerioList='月';
+                                break;
+                            case '4':
+                                $MissionPerioList='年';
+                                break;
+                            default:
+                                $MissionPerioList='';
+                                break;
+                        }
             switch ($row['Status']) {
                 case 0:
                     $ProcessingMission[] = array(
@@ -13,7 +30,7 @@ class KPIMission implements actionPerformed {
                         'MissionPoint' => $row['MissionPoint'],
                         'MissionEndTime' => $row['MissionEndTime'],
                         'MissionPeriod' => $row['MissionPeriod'],
-                        'MissionPeriodList' => $row["MissionPeriodList"],
+                        'MissionPeriodList' => $MissionPerioList,//$row["MissionPeriodList"],
                         'RowID' => $row['RowID'],
                         'LastFinishTime' => $row['LastFinishTime'],
                         'FinishQuantity' => $row['FinishQuantity']);
@@ -25,7 +42,7 @@ class KPIMission implements actionPerformed {
                         'MissionPoint' => $row['MissionPoint'],
                         'MissionEndTime' => $row['MissionEndTime'],
                         'MissionPeriod' => $row['MissionPeriod'],
-                        'MissionPeriodList' => $row["MissionPeriodList"],
+                        'MissionPeriodList' => $MissionPerioList,//$row["MissionPeriodList"],
                         'RowID' => $row['RowID'],
                         'LastFinishTime' => $row['LastFinishTime'],
                         'FinishQuantity' => $row['FinishQuantity']);
@@ -37,7 +54,7 @@ class KPIMission implements actionPerformed {
                         'MissionPoint' => $row['MissionPoint'],
                         'MissionEndTime' => $row['MissionEndTime'],
                         'MissionPeriod' => $row['MissionPeriod'],
-                        'MissionPeriodList' => $row["MissionPeriodList"],
+                        'MissionPeriodList' => $MissionPerioList,//$row["MissionPeriodList"],
                         'RowID' => $row['RowID'],
                         'LastFinishTime' => $row['LastFinishTime'],
                         'FinishQuantity' => $row['FinishQuantity']);

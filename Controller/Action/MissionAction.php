@@ -4,7 +4,7 @@ class MissionAction implements actionPerformed {
 
     public function actionPerformed($event) {
         $SingleplayerModel = new SingleplayerModel();
-        $ID = $_POST["MissionID"];
+        $ID = $_POST["RowID"];
         $doAction=$_POST["doAction"];
         switch($doAction){
             case 'Finish':

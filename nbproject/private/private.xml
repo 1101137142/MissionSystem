@@ -4,10 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/NavBar.tpl</file>
+            <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/MissionAction.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/View/templates/KPIMission.tpl</file>
             <file>file:/C:/wamp64/www/MissionSystem/Model/SingleplayerModel.php</file>
+            <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/KPIMission.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/Homepage.php</file>
             <file>file:/C:/wamp64/www/MissionSystem/Controller/Action/createKPIMission.php</file>
+            <file>file:/C:/wamp64/www/MissionSystem/Controller/Controller.php</file>
         </group>
     </open-files>
 </project-private>

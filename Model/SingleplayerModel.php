@@ -15,19 +15,19 @@ class SingleplayerModel extends Model {
             T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T2.Status
             FROM `missionsystem_missionlist` T1 
                 LEFT JOIN `missionsystem_finishstatus` T2 ON T1.MissionID=T2.MissionID 
-            WHERE T2.owner='2'";
+            WHERE T2.owner='".$_SESSION['PlayerID']."'";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+/*
     function SelectFinishKPIMission() {
         $sql = "SELECT `MissionID`,`MissionName`,`MissionPoint`,`MissionFinishQuantity`,`MissionStatus`,`MissionPeriod` FROM `missionsystem_missionlist` WHERE MissionKPI=1 and MissionStatus=1";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+*/
     function SelectPlayerScore($ID) {
         $sql = "SELECT `PlayerScore` FROM `missionsystem_players` WHERE PlayerID=?";
         $stmt = $this->cont->prepare($sql);
@@ -70,30 +70,31 @@ class SingleplayerModel extends Model {
         }
         
     }
-
+/*
     function selectNewCreateMission($Name, $Point, $Period) {
         $sql = "SELECT `MissionID`,`MissionName`,`MissionPoint`,`MissionFinishQuantity`,`MissionStatus`,`MissionPeriod` FROM `missionsystem_missionlist` WHERE MissionKPI=1 and MissionName=" . $Name . " and MissionPoint=" . $Point . " and MissionPeriod=" . $Period;
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+    }*/
 
     function FinishMission($ID) {
-        $sql = "UPDATE `missionsystem_missionlist` SET `MissionFinishQuantity`=`MissionFinishQuantity`+1 ,`MissionStatus` =1 WHERE `MissionID`=" . $ID . " and `MissionStatus`=0";
+        $sql = "UPDATE `missionsystem_finishstatus` SET `LastFinishTime` = CURRENT_TIMESTAMP, `FinishQuantity` = FinishQuantity+1, `Status` = '1' WHERE `missionsystem_finishstatus`.`RowID` = '".$ID."' and `Status`=0";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
-        return $status;
+        //return $status;
+        return false;
     }
 
     function DelectMission($ID) {
-        $sql = "DELETE FROM `missionsystem_missionlist` WHERE `MissionID`=" . $ID;
+        $sql = "DELETE FROM `missionsystem_finishstatus` WHERE `RowID`=" . $ID;
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $status;
     }
 
     function UnfinishMission($ID) {
-        $sql = "UPDATE `missionsystem_missionlist` SET `MissionFinishQuantity`=`MissionFinishQuantity`-1 ,`MissionStatus` =0 WHERE `MissionID`=" . $ID . " and `MissionStatus`=1";
+        $sql = "UPDATE `missionsystem_finishstatus` SET `FinishQuantity` = FinishQuantity-1,`Status` = '0',`LastFinishTime` = NULL WHERE `RowID`=" . $ID . " and `Status`=1";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $status;

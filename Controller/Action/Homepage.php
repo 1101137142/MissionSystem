@@ -19,11 +19,13 @@ class HomePage implements actionPerformed {
                     'PlayerScore' => $row["PlayerScore"]);
             }
         }else{
+            $_SESSION['PlayerID']='0';
             $_SESSION['PlayerName']='!NotToLogin';
+            $PlayerID='0';
             $PlayerName='!NotToLogin';
         }
         //判斷並連接內容頁
-        if (empty($get["Content"])) {
+        if (empty($get["Content"]) || $PlayerID=='0') {
             $MissionContent = "Content";
         } else {
             $Content = $get["Content"];

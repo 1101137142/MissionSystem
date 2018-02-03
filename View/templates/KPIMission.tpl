@@ -1,15 +1,13 @@
 <script>
-    function FinishMission(ID, Status) {
-        if (Status == 1) {
-            alert("此任務已經完成了");
-        } else {
-            var url = "index.php?action=MissionAction";
+    function FinishMission(ID) {
+        var url = "index.php?action=MissionAction";
             $.ajax({
                 type: "POST",
                 url: url,
-                data: {MissionID: ID,doAction:'Finish'}, // serializes the form's elements.
+                data: {RowID: ID,doAction:'Finish'}, // serializes the form's elements.
                 success: function (data)
                 {
+                    console.log(data);
                     alert("已變更任務狀態")
                     window.location.reload();
                 },
@@ -19,13 +17,13 @@
                 }
             });
         }
-    }
+    
     function DelectMission(ID) {
         var url = "index.php?action=MissionAction";
         $.ajax({
             type: "POST",
             url: url,
-            data: {MissionID: ID,doAction:'Delect'}, // serializes the form's elements.
+            data: {RowID: ID,doAction:'Delect'}, // serializes the form's elements.
             success: function (data)
             {
                 console.log(data);
@@ -38,15 +36,13 @@
             }
         });
     }
-    function UnfinishMission(ID, Status) {
-        if (Status == 0) {
-            alert("此任務處於未完成的狀態");
-        } else {
+    function UnfinishMission(ID) {
+        
             var url = "index.php?action=MissionAction";
             $.ajax({
                 type: "POST",
                 url: url,
-                data: {MissionID: ID,doAction:'Unfinish'}, // serializes the form's elements.
+                data: {RowID: ID,doAction:'Unfinish'}, // serializes the form's elements.
                 success: function (data)
                 {
                     alert("已變更任務狀態");
@@ -58,7 +54,7 @@
                 }
             });
         }
-    }
+    
 
 
 
@@ -77,7 +73,8 @@
             <td align=center><{$item.MissionPeriod}><{$item.MissionPeriodList}></td><td align=center><{$item.LastFinishTime}></td>
             <td align=center><{$item.MissionEndTime}></td><td align=center><{$item.FinishQuantity}></td>
             <td align=center>
-                <button id="FinishBt<{$item.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item.RowID}>)>完成</button><button id="DelectBt<{$item.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item.RowID}>)>刪除</button>
+                <button id="FinishBt<{$item.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item.RowID}>)>完成</button>
+                <button id="DelectBt<{$item.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item.RowID}>)>刪除</button>
             </td></tr>
         <{foreachelse}>
         <tr><td align=center colspan="9">當前沒有任務哦 請先建立任務</td></tr>
@@ -87,15 +84,29 @@
         <tr ><td colspan="2">已完成任務</td><td align=right colspan="7"><button type="button" class="btn btn-success disabled">已完成任務</button></td></tr>
         <tr><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>循環週期</td><td align=center>上次完成時間</td><td align=center>任務結束時間</td><td align=center>任務完成次數</td><td align=center>功能鍵</td></tr>
         <{foreach key=key item=item2 from=$FinishMission name=FinishMission}>
-        <tr ><td align=center ><{$item.MissionID}></td><td align=center><{$item.RowID}></td><td><{$item2.MissionName}></td><td><{$item2.MissionPoint}></td>
-            <td><{$item2.MissionPeriod}><{$item2.MissionPeriodList}></td><td><{$item2.LastFinishTime}></td>
-            <td><{$item2.MissionEndTime}></td><td><{$item2.FinishQuantity}></td>
+        <tr ><td align=center ><{$item2.MissionID}></td><td align=center><{$item2.RowID}></td><td align=center><{$item2.MissionName}></td>
+            <td align=center><{$item2.MissionPoint}></td><td align=center><{$item2.MissionPeriod}><{$item2.MissionPeriodList}></td>
+            <td align=center><{$item2.LastFinishTime}></td><td align=center><{$item2.MissionEndTime}></td>
+            <td align=center><{$item2.FinishQuantity}></td>
             <td align=center>
-                <button id="FinishBt<{$item2.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item2.RowID}>)>完成</button>
+                <button id="UnfinishBt<{$item2.RowID}>" type="button" class="btn btn-warning" onclick=UnfinishMission(<{$item2.RowID}>)>取消</button>
                 <button id="DelectBt<{$item2.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item2.RowID}>)>刪除</button>
             </td></tr>
         <{foreachelse}>
         <tr><td align=center colspan="9">當前沒有已完成任務哦</td></tr>
+        <{/foreach}>
+        <tr ><td colspan="2">已結束任務</td><td align=right colspan="7"><button type="button" class="btn btn-success disabled">已結束任務</button></td></tr>
+        <tr><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>循環週期</td><td align=center>上次完成時間</td><td align=center>任務結束時間</td><td align=center>任務完成次數</td><td align=center>功能鍵</td></tr>
+        <{foreach key=key item=item3 from=$EndMission name=EndMission}>
+        <tr ><td align=center ><{$item3.MissionID}></td><td align=center><{$item3.RowID}></td><td align=center><{$item3.MissionName}></td>
+            <td align=center><{$item3.MissionPoint}></td><td align=center><{$item3.MissionPeriod}><{$item3.MissionPeriodList}></td>
+            <td align=center><{$item3.LastFinishTime}></td><td align=center><{$item3.MissionEndTime}></td>
+            <td align=center><{$item3.FinishQuantity}></td>
+            <td align=center>
+                
+            </td></tr>
+        <{foreachelse}>
+        <tr><td align=center colspan="9">當前沒有已結束任務哦</td></tr>
         <{/foreach}>
     </table>
 
@@ -152,7 +163,7 @@
                 } else {
                     alert('您建立了一個序號為' + data[0]['MissionID'] + '的' + data[0]['MissionName'] + '任務');
                 }
-                //$("#NotFinishTable").append("<tr ><td align=center ></td><td></td><td></td><td ></td><td id=MS<{$smarty.foreach.Mission.iteration}>></td><td></td><td align=center><button id=Bt type=button class=btn btn-success onclick=FinishMission(<{$item.MissionID}>,<{$item.MissionStatus}>)>完成</button></td></tr>")
+                //$("#NotFinishTable").append("<tr ><td align=center ></td><td></td><td></td><td ></td><td id=MS<$smarty.foreach.Mission.iteration}>></td><td></td><td align=center><button id=Bt type=button class=btn btn-success onclick=FinishMission(<$item.MissionID}>,<$item.MissionStatus}>)>完成</button></td></tr>")
             },
             error: function (data) {
 

@@ -160,7 +160,7 @@
                     HTML += data['0']['PlayerName'];
                     HTML += '<span class="caret"></span></a><ul class="dropdown-menu">';
                     HTML += '<li><a href="#">Change Password</a></li>';
-                    HTML += '<li><a href="#">My Profile</a></li></ul>';
+                    HTML += '<li><a href="#">My Profile</a></li><a href="#">Log out</a></li></ul>';
                     $('#loginli').html(HTML);
                 }
 
