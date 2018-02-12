@@ -39,12 +39,21 @@
                     <ul class="nav navbar-nav">
                         <li><a href="index.php">Home</a></li>
                         <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Preparations<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">Purpose/Objective/Solve the problem</li><!--小類別  為了什麼 目標/目的/問題-->
+                                <li><a href="index.php?action=Homepage&Content=KPIMission">Objective</a></li><!--設立短期目標的KPI系統-->
+                                <li role="separator" class="divider"></li><!--分隔橫線-->
+                                <li class="dropdown-header">To do list</li><!--小類別 根據目標/目的/問題 產生的待辦清單-->
+                                <li><a href="#">To do list</a></li><!--任務與計分系統-->
+                            </ul>
+                        </li>
+                        <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mission System<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-header">Singleplayer Mission</li><!--小類別 單人-->
                                 <li><a href="index.php?action=Homepage&Content=KPIMission">KPIMission</a></li><!--設立短期目標的KPI系統-->
                                 <li><a href="index.php?action=Homepage&Content=MissionAndPoint">Mission & Point</a></li><!--任務與計分系統-->
-                                <li><a href="index.php?action=Homepage&Content=Store">Shop Store</a></li><!--分數購物商店-->
                                 <li role="separator" class="divider"></li><!--分隔橫線-->
                                 <li class="dropdown-header">Multiplayer Mission</li><!--小類別 多人-->
                                 <li><a href="#">Mission & Point</a></li><!--任務與計分系統-->
@@ -52,6 +61,7 @@
                                 <li><a href="#">Set Up</a></li><!--環境設定-->
                             </ul>
                         </li>
+                        <li><a href="index.php?action=Homepage&Content=Store">Shop Store</a></li><!--分數購物商店-->
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Anything<span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -138,7 +148,7 @@
         HTML += '<span class="caret"></span></a><ul class="dropdown-menu">';
         HTML += '<li><a href="#" data-toggle="modal" data-target="#ChangePassword">Change Password</a></li>';
         HTML += '<li><a href="#">My Profile</a></li>';
-        HTML += '<li><a href="#">Log out</a></li></ul>';
+        HTML += '<li><a href="index.php?action=doLogout">Log out</a></li></ul>';
         $('#loginli').html(HTML);
     }
     $("#login-nav").submit(function (e) {
@@ -162,7 +172,7 @@
                     HTML += '<span class="caret"></span></a><ul class="dropdown-menu">';
                     HTML += '<li><a href="#">Change Password</a></li>';
                     HTML += '<li><a href="#">My Profile</a></li>';
-                    HTML += '<li><a href="#">Log out</a></li></ul>';
+                    HTML += '<li><a href="index.php?action=doLogout">Log out</a></li></ul>';
                     $('#loginli').html(HTML);
                 }
 

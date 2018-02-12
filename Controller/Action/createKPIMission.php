@@ -12,9 +12,11 @@ class createKPIMission implements actionPerformed {
             $Point = $_POST["MissionPoint"];
             $Period = $_POST["MissionPeriod"];
             $MissionEndTime = $_POST['MissionEndTime'];
+            $StartTime=$_POST['StartTime'];
+            $MissionEndQuantity=$_POST['MissionEndQuantity'];            
             //$MissionAttribute=$_POST['MissionAttribute'];
             $MissionPeriodList = $_POST['MissionPeriodList'];
-            $CreateStatus = $SingleplayerModel->CreateMission($Name, $Point, $Period, $MissionEndTime, '1', $MissionPeriodList);
+            $CreateStatus = $SingleplayerModel->CreateMission($Name, $Point, $Period,$StartTime, $MissionEndTime,$MissionEndQuantity, '1', $MissionPeriodList);
             if ($CreateStatus == '0') {
                 $NewMission['Returnmsg'] = 'Mission isn\'t created';
             } else {

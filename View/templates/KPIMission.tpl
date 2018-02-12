@@ -131,8 +131,9 @@
                                         <option value="3">月</option>
                                         <option value="4">年</option>
                                     </select></td></tr>
-                            <tr><td>任務結束時間 (選填) ：</td><td><input type="datetime-local" name="MissionEndTime" ID="MissionEndTime"></td></tr>
-                            <!-- <input type="hidden" name="MissionAttribute" ID="MissionAttribute" value="1"> -->
+                            <tr><td>任務結束次數 (選填) ：</td><td><input type="number" name="MissionEndQuantity" ID="MissionEndQuantity"></td></tr>                            
+                            <tr><td>任務開始時間 　　　 ：</td><td><input type="datetime-local" name="StartTime" ID="StartTime"></td></tr>
+                            <tr><td>任務結束時間 (選填) ：</td><td><input type="datetime-local" name="MissionEndTime" ID="MissionEndTime"></td></tr>                            
                         </table>
                         <button type="submit" class="btn btn-success"  id="submitForm">送出</button>
                     </form>

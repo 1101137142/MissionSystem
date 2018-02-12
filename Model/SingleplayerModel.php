@@ -21,7 +21,11 @@ class SingleplayerModel extends Model {
         $status = $stmt->execute();
 
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $EndTime = strtotime($row['MissionEndTime']);
+            if (strtotime($row['MissionEndTime']) == '') {
+                $EndTime = strtotime("now") + 1000;
+            } else {
+                $EndTime = strtotime($row['MissionEndTime']);
+            }
             $refresh = false;
             if ($row['RefreshTime'] == NULL || $row['RefreshTime'] == '') {
                 $RefreshTime = strtotime($row['StartTime']);
@@ -29,41 +33,48 @@ class SingleplayerModel extends Model {
             } else {
                 $RefreshTime = strtotime($row['RefreshTime']);   //轉換成UNIX時間格式
             }
-
-            switch ($row['MissionPeriodList']) {    //判斷更新的時間單位
-                case '1':
-                    while (strtotime("now") >= $RefreshTime + (60 * 60 * $row['MissionPeriod'])) {
-                        $RefreshTime = $RefreshTime + (60 * 60 * $row['MissionPeriod']);
-                        $refresh = true;
+            if ($row['Status'] == '1' || $row['Status'] == '0') {
+                if (strtotime("now") >= $EndTime) {
+                    $sqlu = "UPDATE `missionsystem_finishstatus` SET  `Status` = 2 WHERE `missionsystem_finishstatus`.`RowID` = '" . $row['RowID'] . "'";
+                    $stmtu = $this->cont->prepare($sqlu);
+                    $statusu = $stmtu->execute();
+                } else {
+                    switch ($row['MissionPeriodList']) {    //判斷更新的時間單位
+                        case '1':
+                            while (strtotime("now") >= $RefreshTime + (60 * 60 * $row['MissionPeriod'])) {
+                                $RefreshTime = $RefreshTime + (60 * 60 * $row['MissionPeriod']);
+                                $refresh = true;
+                            };
+                            break;
+                        case '2':
+                            while (strtotime("now") >= $RefreshTime + (60 * 60 * 24 * $row['MissionPeriod'])) {
+                                $RefreshTime = $RefreshTime + (60 * 60 * $row['MissionPeriod']);
+                                $refresh = true;
+                            };
+                            break;
+                        case '3':
+                            while (strtotime("now") >= $RefreshTime + (60 * 60 * 24 * 7 * $row['MissionPeriod'])) {
+                                $RefreshTime = $RefreshTime + (60 * 60 * $row['MissionPeriod']);
+                                $refresh = true;
+                            };
+                            break;
+                        case '4':
+                            while (strtotime("now") >= mktime(date("G", $RefreshTime), date("i", $RefreshTime), date("s", $RefreshTime), date("m", $RefreshTime), date("d", $RefreshTime), date("Y", $RefreshTime) + $row['MissionPeriod'])) {
+                                $RefreshTime = mktime(date("G", $RefreshTime), date("i", $RefreshTime), date("s", $RefreshTime), date("m", $RefreshTime), date("d", $RefreshTime), date("Y", $RefreshTime) + $row['MissionPeriod']);
+                                $refresh = true;
+                            };
+                            break;
+                        default:
+                            break;
+                    }
+                    if ($refresh == true) {
+                        $RefreshTime = date("Y-m-d H:i:s", $RefreshTime);
+                        $sqlu = "UPDATE `missionsystem_finishstatus` SET `RefreshTime` = '" . $RefreshTime . "' , `Status` = 0 WHERE `missionsystem_finishstatus`.`RowID` = '" . $row['RowID'] . "'";
+                        $stmtu = $this->cont->prepare($sqlu);
+                        $statusu = $stmtu->execute();
                     };
-                    break;
-                case '2':
-                    while (strtotime("now") >= $RefreshTime + (60 * 60 * 24 * $row['MissionPeriod'])) {
-                        $RefreshTime = $RefreshTime + (60 * 60 * $row['MissionPeriod']);
-                        $refresh = true;
-                    };
-                    break;
-                case '3':
-                    while (strtotime("now") >= $RefreshTime + (60 * 60 * 24 * 7 * $row['MissionPeriod'])) {
-                        $RefreshTime = $RefreshTime + (60 * 60 * $row['MissionPeriod']);
-                        $refresh = true;
-                    };
-                    break;
-                case '4':
-                    while (strtotime("now") >= mktime(date("G", $RefreshTime), date("i", $RefreshTime), date("s", $RefreshTime), date("m", $RefreshTime), date("d", $RefreshTime), date("Y", $RefreshTime) + $row['MissionPeriod'])) {
-                        $RefreshTime = mktime(date("G", $RefreshTime), date("i", $RefreshTime), date("s", $RefreshTime), date("m", $RefreshTime), date("d", $RefreshTime), date("Y", $RefreshTime) + $row['MissionPeriod']);
-                        $refresh = true;
-                    };
-                    break;
-                default:
-                    break;
+                }
             }
-            if ($refresh == true) {
-                $RefreshTime = date("Y-m-d H:i:s", $RefreshTime);
-                $sqlu = "UPDATE `missionsystem_finishstatus` SET `RefreshTime` = '" . $RefreshTime . "' , `Status` = 0 WHERE `missionsystem_finishstatus`.`RowID` = '" . $row['RowID'] . "'";
-                $stmtu = $this->cont->prepare($sqlu);
-                $statusu = $stmtu->execute();
-            };
         };
         $sql = "SELECT T1.`MissionID`,T1.MissionName,T1.MissionPoint,T1.MissionEndTime,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
             T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T2.Status
@@ -91,7 +102,7 @@ class SingleplayerModel extends Model {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    function CreateMission($Name, $Point, $Period, $EndTime, $MissionAttribute, $MissionPeriodList) {
+    function CreateMission($Name, $Point, $Period, $StartTime, $EndTime, $MissionEndQuantity, $MissionAttribute, $MissionPeriodList) {
         if ($EndTime != '') {
             $EndTime = "'" . $EndTime . "'";
         } else {
@@ -105,9 +116,13 @@ class SingleplayerModel extends Model {
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $MissionID = $result['MissionID'];
-
-            $StartTime = date('Y-m-d H:i:s');
-            $sqlx = "INSERT INTO `missionsystem_missionlist`( `MissionID`,`MissionName`, `MissionPoint`, `MissionCreateTime`,`MissionEndTime`,`MissionPeriod`,`MissionPeriodList`, `MissionAttribute`,`MissionCreater`) VALUES ('" . $MissionID . "','" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP," . $EndTime . ",'" . $Period . "','" . $MissionPeriodList . "','" . $MissionAttribute . "'," . $_SESSION['PlayerID'] . ")";
+            if ($StartTime == '' || $StartTime == NULL) {
+                $date = date("Y-m-d");
+                $Udate = strtotime($date);
+                $StartTime = date("Y-m-d H:i:s", $Udate);
+            };
+            //$StartTime = date('Y-m-d H:i:s');
+            $sqlx = "INSERT INTO `missionsystem_missionlist`( `MissionID`,`MissionName`, `MissionPoint`, `MissionCreateTime`,`MissionEndTime`,`MissionEndQuantity`,`MissionPeriod`,`MissionPeriodList`, `MissionAttribute`,`MissionCreater`) VALUES ('" . $MissionID . "','" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP," . $EndTime . ",'" . $MissionEndQuantity . "','" . $Period . "','" . $MissionPeriodList . "','" . $MissionAttribute . "'," . $_SESSION['PlayerID'] . ")";
             $stmtx = $this->cont->prepare($sqlx);
             $statusx = $stmtx->execute();
             $sqly = "INSERT INTO `missionsystem_finishstatus`( `MissionID`,`StartTime`, `Owner`) VALUES ('" . $MissionID . "','" . $StartTime . "','" . $_SESSION['PlayerID'] . "')";
@@ -143,14 +158,37 @@ class SingleplayerModel extends Model {
         $sql = "UPDATE `missionsystem_finishstatus` SET `LastFinishTime` = CURRENT_TIMESTAMP, `FinishQuantity` = FinishQuantity+1, `Status` = '1' WHERE `missionsystem_finishstatus`.`RowID` = '" . $ID . "' and `Status`=0";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
+        $sql = "UPDATE `missionsystem_finishstatus` T1 left join `missionsystem_missionlist` T2 on T1.MissionID=T2.MissionID  SET  `Status` = '2' WHERE T1.`RowID` = '" . $ID . "' and T1.`FinishQuantity`>=T2.`MissionEndQuantity`";
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
         //return $status;
         return false;
     }
 
     function DelectMission($ID) {
-        $sql = "DELETE FROM `missionsystem_finishstatus` WHERE `RowID`=" . $ID;
+        $sql = "SELECT MissionID FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID."'";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
+            $MissionID=$row['MissionID'];
+        }
+        
+        $sql = "DELETE FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID."'";
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
+        
+        
+        $sql = "SELECT T1.`MissionID`,COUNT(RowID) as Count FROM missionsystem_missionlist T1 LEFT JOIN missionsystem_finishstatus T2 ON T1.MissionID=T2.MissionID where T1.MissionID='".$MissionID."'  GROUP BY T1.MissionID ";
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
+            if($row['Count']=='0'){
+                $sqlx = "DELETE FROM `missionsystem_missionlist` WHERE `MissionID` = '" . $row['MissionID']."'";
+                $stmtx = $this->cont->prepare($sqlx);
+                $statusx = $stmtx->execute();
+            }
+        }
+        
         return $status;
     }
 
