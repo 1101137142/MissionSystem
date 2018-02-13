@@ -1,23 +1,27 @@
 <script>
     function FinishMission(ID) {
         var url = "index.php?action=MissionAction";
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: {RowID: ID,doAction:'Finish'}, // serializes the form's elements.
-                success: function (data)
-                {
-                    console.log(data);
-                    alert("已變更任務狀態")
-                    window.location.reload();
-                },
-                error: function (data) {
-                    console.log('An error occurred.');
-                    console.log(data);
-                }
-            });
-        }
-    
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {RowID: ID,doAction:'Finish'}, // serializes the form's elements.
+            success: function (data)
+            {   alert("已變更任務狀態");
+                /*console.log(data);
+                if (data == 'true') {
+                    alert("已變更任務狀態");
+                } else {
+                    alert("任務狀態變更失敗");
+                }*/
+                window.location.reload();
+            },
+            error: function (data) {
+                console.log('An error occurred.');
+                console.log(data);
+            }
+        });
+    }
+
     function DelectMission(ID) {
         var url = "index.php?action=MissionAction";
         $.ajax({
@@ -37,24 +41,29 @@
         });
     }
     function UnfinishMission(ID) {
-        
-            var url = "index.php?action=MissionAction";
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: {RowID: ID,doAction:'Unfinish'}, // serializes the form's elements.
-                success: function (data)
-                {
+
+        var url = "index.php?action=MissionAction";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {RowID: ID,doAction:'Unfinish'}, // serializes the form's elements.
+            success: function (data)
+            {   alert("已變更任務狀態");
+                //console.log(data);
+                /*if (data == 'true') {
                     alert("已變更任務狀態");
-                    window.location.reload();
-                },
-                error: function (data) {
-                    console.log('An error occurred.');
-                    console.log(data);
-                }
-            });
-        }
-    
+                } else {
+                    alert("任務狀態變更失敗");
+                }*/
+                window.location.reload();
+            },
+            error: function (data) {
+                console.log('An error occurred.');
+                console.log(data);
+            }
+        });
+    }
+
 
 
 
@@ -79,8 +88,8 @@
         <{foreachelse}>
         <tr><td align=center colspan="9">當前沒有任務哦 請先建立任務</td></tr>
         <{/foreach}>
-    <!--</table>
-    <table class="table table-hover" ID="FinishTable">-->
+        <!--</table>
+        <table class="table table-hover" ID="FinishTable">-->
         <tr ><td colspan="2">已完成任務</td><td align=right colspan="7"><button type="button" class="btn btn-success disabled">已完成任務</button></td></tr>
         <tr><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>循環週期</td><td align=center>上次完成時間</td><td align=center>任務結束時間</td><td align=center>任務完成次數</td><td align=center>功能鍵</td></tr>
         <{foreach key=key item=item2 from=$FinishMission name=FinishMission}>
@@ -103,7 +112,7 @@
             <td align=center><{$item3.LastFinishTime}></td><td align=center><{$item3.MissionEndTime}></td>
             <td align=center><{$item3.FinishQuantity}></td>
             <td align=center>
-                
+
             </td></tr>
         <{foreachelse}>
         <tr><td align=center colspan="9">當前沒有已結束任務哦</td></tr>

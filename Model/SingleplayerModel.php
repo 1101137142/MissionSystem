@@ -155,40 +155,59 @@ class SingleplayerModel extends Model {
       } */
 
     function FinishMission($ID) {
+        $this->cont->beginTransaction();
         $sql = "UPDATE `missionsystem_finishstatus` SET `LastFinishTime` = CURRENT_TIMESTAMP, `FinishQuantity` = FinishQuantity+1, `Status` = '1' WHERE `missionsystem_finishstatus`.`RowID` = '" . $ID . "' and `Status`=0";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
-        $sql = "UPDATE `missionsystem_finishstatus` T1 left join `missionsystem_missionlist` T2 on T1.MissionID=T2.MissionID  SET  `Status` = '2' WHERE T1.`RowID` = '" . $ID . "' and T1.`FinishQuantity`>=T2.`MissionEndQuantity`";
-        $stmt = $this->cont->prepare($sql);
-        $status = $stmt->execute();
-        //return $status;
-        return false;
+        $sqlA = "SELECT `MissionPoint` FROM `missionsystem_missionlist` T1 JOIN `missionsystem_finishstatus` T2 ON T1.`MissionID`=T2.`MissionID` WHERE RowID='" . $ID . "'";
+        $stmtA = $this->cont->prepare($sqlA);
+        $statusA = $stmtA->execute();
+        $MissionPoint = 0;
+        foreach ($stmtA->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $MissionPoint = $row['MissionPoint'];
+        }
+        $sqlB = "UPDATE `missionsystem_players` SET `PlayerScore`=`PlayerScore`+" . $MissionPoint . " WHERE `PlayerID`= '" . $_SESSION['PlayerID'] . "' ";
+        $stmtB = $this->cont->prepare($sqlB);
+        $statusB = $stmtB->execute();
+        if ($status && $statusB) {
+            $this->cont->commit();
+            $sql = "UPDATE `missionsystem_finishstatus` T1 left join `missionsystem_missionlist` T2 on T1.MissionID=T2.MissionID  SET  `Status` = '2' WHERE T1.`RowID` = '" . $ID . "' and T1.`FinishQuantity`>=T2.`MissionEndQuantity`";
+            $stmt = $this->cont->prepare($sql);
+            $status = $stmt->execute();
+            $Ajaxstatus = 'true';
+        } else {
+            $this->cont->rollback();
+            $Ajaxstatus = 'false';
+        }
+
+        return $Ajaxstatus;
+        //return false;
     }
 
     function DelectMission($ID) {
-        $sql = "SELECT MissionID FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID."'";
+        $sql = "SELECT MissionID FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID . "'";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
-            $MissionID=$row['MissionID'];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $MissionID = $row['MissionID'];
         }
-        
-        $sql = "DELETE FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID."'";
+
+        $sql = "DELETE FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID . "'";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
-        
-        
-        $sql = "SELECT T1.`MissionID`,COUNT(RowID) as Count FROM missionsystem_missionlist T1 LEFT JOIN missionsystem_finishstatus T2 ON T1.MissionID=T2.MissionID where T1.MissionID='".$MissionID."'  GROUP BY T1.MissionID ";
+
+
+        $sql = "SELECT T1.`MissionID`,COUNT(RowID) as Count FROM missionsystem_missionlist T1 LEFT JOIN missionsystem_finishstatus T2 ON T1.MissionID=T2.MissionID where T1.MissionID='" . $MissionID . "'  GROUP BY T1.MissionID ";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
-            if($row['Count']=='0'){
-                $sqlx = "DELETE FROM `missionsystem_missionlist` WHERE `MissionID` = '" . $row['MissionID']."'";
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            if ($row['Count'] == '0') {
+                $sqlx = "DELETE FROM `missionsystem_missionlist` WHERE `MissionID` = '" . $row['MissionID'] . "'";
                 $stmtx = $this->cont->prepare($sqlx);
                 $statusx = $stmtx->execute();
             }
         }
-        
+
         return $status;
     }
 
