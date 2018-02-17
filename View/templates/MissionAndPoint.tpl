@@ -83,9 +83,15 @@
         <tr ><td align=center ><{$item.MissionID}></td><td align=center><{$item.RowID}></td><td align=center><{$item.MissionName}></td><td align=center><{$item.MissionPoint}></td>
             <td align=center><{$item.StartTime}></td>
             <td align=center><{$item.MissionEndTime}></td>
-            <td align=center style="width: 20%"><div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <{$item.percentage}>%">
-                    <span class="sr-only"><{$item.percentage}>% Complete (success)</span><{$item.percentage}>%
+            
+            <td align=center ><div class="progress"><div class="progress-bar progress-bar-striped <{if $item.percentage<=60}> progress-bar-info <{elseif $item.percentage>=61 && $item.percentage<=80}> progress-bar-warning <{elseif $item.percentage>=81 && $item.percentage<=100}> progress-bar-danger <{/if}>" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <{$item.percentage}>%">
+                    <span class="sr-only"><{$item.percentage}>% Complete </span><{$item.percentage}>%
                 </div></div></td>
+                
+            <{*if $item.percentage<=60}>
+            <{elseif $item.percentage>=61 && $item.percentage<=80}>
+            <{elseif $item.percentage>=81 && $item.percentage<=100}>
+            <{/if*}>
             <td align=center>
                 <button id="FinishBt<{$item.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item.RowID}>)>完成</button>
                 <button id="DelectBt<{$item.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item.RowID}>)>刪除</button>
@@ -102,7 +108,7 @@
             <td align=center><{$item3.StartTime}></td>
             <td align=center><{$item3.LastFinishTime}></td>
             <td align=center><{$item3.MissionEndTime}></td>
-            <td align=center ><div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <{$item3.percentage}>%">
+            <td align=center ><div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <{$item3.percentage}>%">
                     <span class="sr-only"><{$item3.percentage}>% Complete (success)</span><{$item3.percentage}>%
                 </div></div></td>
             <td align=center>
