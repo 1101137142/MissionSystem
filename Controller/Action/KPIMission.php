@@ -33,7 +33,8 @@ class KPIMission implements actionPerformed {
                         'MissionPeriodList' => $MissionPerioList,//$row["MissionPeriodList"],
                         'RowID' => $row['RowID'],
                         'LastFinishTime' => $row['LastFinishTime'],
-                        'FinishQuantity' => $row['FinishQuantity']);
+                        'FinishQuantity' => $row['FinishQuantity'],
+                        'MissionEndQuantity'=> $row['MissionEndQuantity']);
                     break;
                 case 1:
                     $FinishMission[] = array(
@@ -45,7 +46,8 @@ class KPIMission implements actionPerformed {
                         'MissionPeriodList' => $MissionPerioList,//$row["MissionPeriodList"],
                         'RowID' => $row['RowID'],
                         'LastFinishTime' => $row['LastFinishTime'],
-                        'FinishQuantity' => $row['FinishQuantity']);
+                        'FinishQuantity' => $row['FinishQuantity'],
+                        'MissionEndQuantity'=> $row['MissionEndQuantity']);
                     break;
                 case 2:
                     $EndMission[] = array(
@@ -57,7 +59,8 @@ class KPIMission implements actionPerformed {
                         'MissionPeriodList' => $MissionPerioList,//$row["MissionPeriodList"],
                         'RowID' => $row['RowID'],
                         'LastFinishTime' => $row['LastFinishTime'],
-                        'FinishQuantity' => $row['FinishQuantity']);
+                        'FinishQuantity' => $row['FinishQuantity'],
+                        'MissionEndQuantity'=> $row['MissionEndQuantity']);
                     break;
                 default :
                     break;
