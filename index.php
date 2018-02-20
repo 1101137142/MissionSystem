@@ -8,6 +8,7 @@ $MODEL="Model";
 require_once $MODEL.'/Model.php';
 require_once $MODEL.'/SingleplayerModel.php';
 require_once $MODEL.'/PlayerModel.php';
+require_once $MODEL.'/PreparationsModel.php';
 
 $VIEW="View";
 require_once $VIEW."/KSmarty.php";

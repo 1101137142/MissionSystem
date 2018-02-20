@@ -11,9 +11,31 @@ class SingleplayerModel extends Model {
 
     function CreateMission($Name, $Point, $Period, $StartTime, $EndTime, $MissionEndQuantity, $MissionAttribute, $MissionPeriodList) {
         if ($EndTime != '') {
+            
+            switch($MissionPeriodList){
+                case '1':
+                    $MissionValidityQuantity=round((strtotime($EndTime)-strtotime($StartTime))/($Period*60*60),0);//結束時間-開始時間 整除 周期時間 得出周期次數 
+                    break;
+                case '2':
+                    $MissionValidityQuantity=round((strtotime($EndTime)-strtotime($StartTime))/($Period*60*60*24),0);//結束時間-開始時間 整除 周期時間 得出周期次數 
+                    break;
+                case '3':
+                    $MissionValidityQuantity=round((strtotime($EndTime)-strtotime($StartTime))/($Period*60*60*24*7),0);//結束時間-開始時間 整除 周期時間 得出周期次數 
+                    break;
+                case '4':
+                    $MissionValidityQuantity=round((strtotime($EndTime)-strtotime($StartTime))/($Period*60*60*24*365),0);//結束時間-開始時間 整除 周期時間 得出周期次數 
+                    break;
+            }
             $EndTime = "'" . $EndTime . "'";
+            //$MissionValidityQuantity="'".$MissionValidityQuantity."'";
         } else {
             $EndTime = 'NULL';
+            $MissionValidityQuantity='NULL';
+        }
+        if ($MissionEndQuantity != '') {
+            $MissionEndQuantity = "'" . $MissionEndQuantity . "'";
+        } else {
+            $MissionEndQuantity = 'NULL';
         }
         try {
             $this->cont->beginTransaction();
@@ -29,15 +51,15 @@ class SingleplayerModel extends Model {
                 $StartTime = date("Y-m-d H:i:s", $Udate);
             };
             //$StartTime = date('Y-m-d H:i:s');
-            $sqlx = "INSERT INTO `missionsystem_missionlist`( `MissionID`,`MissionName`, `MissionPoint`, `MissionCreateTime`,`MissionEndTime`,`MissionEndQuantity`,`MissionPeriod`,`MissionPeriodList`, `MissionAttribute`,`MissionCreater`) VALUES ('" . $MissionID . "','" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP," . $EndTime . ",'" . $MissionEndQuantity . "','" . $Period . "','" . $MissionPeriodList . "','" . $MissionAttribute . "'," . $_SESSION['PlayerID'] . ")";
+            $sqlx = "INSERT INTO `missionsystem_missionlist`( `MissionID`,`MissionName`, `MissionPoint`, `MissionCreateTime`,`MissionValidityQuantity`,`MissionEndQuantity`,`MissionPeriod`,`MissionPeriodList`, `MissionAttribute`,`MissionCreater`) VALUES ('" . $MissionID . "','" . $Name . "'," . $Point . ",CURRENT_TIMESTAMP, " .$MissionValidityQuantity. " , " . $MissionEndQuantity . " ,'" . $Period . "','" . $MissionPeriodList . "','" . $MissionAttribute . "'," . $_SESSION['PlayerID'] . ")";
             $stmtx = $this->cont->prepare($sqlx);
             $statusx = $stmtx->execute();
-            $sqly = "INSERT INTO `missionsystem_finishstatus`( `MissionID`,`StartTime`, `Owner`) VALUES ('" . $MissionID . "','" . $StartTime . "','" . $_SESSION['PlayerID'] . "')";
+            $sqly = "INSERT INTO `missionsystem_finishstatus`( `MissionID`,`StartTime`,`EndTime`, `Owner`) VALUES ('" . $MissionID . "','" . $StartTime . "'," . $EndTime . ",'" . $_SESSION['PlayerID'] . "')";
             $stmty = $this->cont->prepare($sqly);
             $statusy = $stmty->execute();
             if ($statusx && $statusy) {
                 $this->cont->commit();
-                $sqls = "SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T1.`MissionEndTime`,T1.MissionPeriod,T2.`LastFinishTime`,T2.`FinishQuantity`,T2.`Status` FROM `missionsystem_missionlist` T1 LEFT JOIN `missionsystem_finishstatus` T2 on T1.MissionID=T2.MissionID WHERE T1.`MissionID`=:MissionID  AND T2.`Owner`=:Owner";
+                $sqls = "SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T2.`EndTime`,T1.MissionPeriod,T2.`LastFinishTime`,T2.`FinishQuantity`,T2.`Status` FROM `missionsystem_missionlist` T1 LEFT JOIN `missionsystem_finishstatus` T2 on T1.MissionID=T2.MissionID WHERE T1.`MissionID`=:MissionID  AND T2.`Owner`=:Owner";
                 $stmts = $this->cont->prepare($sqls);
                 $statuss = $stmts->execute(array(':MissionID' => $MissionID, ':Owner' => $_SESSION['PlayerID']));
 
@@ -54,7 +76,7 @@ class SingleplayerModel extends Model {
     }
 
     function SelectKPIMission() {
-        $sql = "SELECT T1.`MissionID`,T1.MissionName,T1.MissionPoint,T1.MissionEndTime,
+        $sql = "SELECT T1.`MissionID`,T1.MissionName,T1.MissionPoint,T2.EndTime,
             T2.StartTime,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
             T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T2.Status
             FROM `missionsystem_missionlist` T1 
@@ -64,10 +86,10 @@ class SingleplayerModel extends Model {
         $status = $stmt->execute();
 
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            if (strtotime($row['MissionEndTime']) == '') {
+            if (strtotime($row['EndTime']) == '') {
                 $EndTime = strtotime("now") + 1000;
             } else {
-                $EndTime = strtotime($row['MissionEndTime']);
+                $EndTime = strtotime($row['EndTime']);
             }
             $refresh = false;
             if ($row['RefreshTime'] == NULL || $row['RefreshTime'] == '') {
@@ -127,11 +149,11 @@ class SingleplayerModel extends Model {
         $sqlu = "UPDATE `missionsystem_finishstatus` T1 join `missionsystem_missionlist` T2 on T1.MissionID=T2.MissionID SET  T1.`Status` = 2 WHERE  T1.FinishQuantity>=T2.MissionEndQuantity";
         $stmtu = $this->cont->prepare($sqlu);
         $statusu = $stmtu->execute();
-        $sql = "SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T1.`MissionEndTime`,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
+        $sql = "SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T2.`EndTime`,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
             T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T1.MissionEndQuantity,T2.Status
             FROM `missionsystem_missionlist` T1 
                 LEFT JOIN `missionsystem_finishstatus` T2 ON T1.MissionID=T2.MissionID 
-            WHERE T2.owner='" . $_SESSION['PlayerID'] . "' AND MissionAttribute='1'";
+            WHERE T2.owner='" . $_SESSION['PlayerID'] . "' AND MissionAttribute='1' Order by T1.`MissionPeriodList` ASC,T1.`MissionPeriod` ASC";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -153,7 +175,7 @@ class SingleplayerModel extends Model {
       return $stmt->fetch(PDO::FETCH_ASSOC);
       } */
 
-    function FinishMission($ID) {
+    function FinishKPIMission($ID) {
         $this->cont->beginTransaction();
         $sql = "UPDATE `missionsystem_finishstatus` SET `LastFinishTime` = CURRENT_TIMESTAMP, `FinishQuantity` = FinishQuantity+1, `Status` = '1' WHERE `missionsystem_finishstatus`.`RowID` = '" . $ID . "' and `Status`=0";
         $stmt = $this->cont->prepare($sql);
@@ -183,7 +205,7 @@ class SingleplayerModel extends Model {
         //return false;
     }
 
-    function DelectMission($ID) {
+    function DelectKPIMission($ID) {
         $sql = "SELECT MissionID FROM `missionsystem_finishstatus` WHERE `RowID`='" . $ID . "'";
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
@@ -210,7 +232,7 @@ class SingleplayerModel extends Model {
         return $status;
     }
 
-    function UnfinishMission($ID) {
+    function UnfinishKPIMission($ID) {
         $this->cont->beginTransaction();
         $sql = "UPDATE `missionsystem_finishstatus` SET `FinishQuantity` = FinishQuantity-1,`Status` = '0',`LastFinishTime` = NULL WHERE `RowID`=" . $ID . " and `Status`=1";
         $stmt = $this->cont->prepare($sql);
@@ -234,7 +256,7 @@ class SingleplayerModel extends Model {
     }
 
     function SelectMissionAndPoint() {
-        $sql = "SELECT T1.`MissionID`,T1.MissionName,T1.MissionPoint,T1.MissionEndTime,
+        $sql = "SELECT T1.`MissionID`,T1.MissionName,T1.MissionPoint,T2.EndTime,
             T2.StartTime,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
             T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T2.Status
             FROM `missionsystem_missionlist` T1 
@@ -244,10 +266,10 @@ class SingleplayerModel extends Model {
         $status = $stmt->execute();
 
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            if (strtotime($row['MissionEndTime']) == '') {
+            if (strtotime($row['EndTime']) == '') {
                 $EndTime = strtotime("now") + 1000;
             } else {
-                $EndTime = strtotime($row['MissionEndTime']);
+                $EndTime = strtotime($row['EndTime']);
             }
             if ($row['Status'] == '1' || $row['Status'] == '0') {
                 if (strtotime("now") >= $EndTime) {
@@ -260,7 +282,7 @@ class SingleplayerModel extends Model {
         $sqlu = "UPDATE `missionsystem_finishstatus` T1 join `missionsystem_missionlist` T2 on T1.MissionID=T2.MissionID SET  T1.`Status` = 2 WHERE  T1.FinishQuantity>=T2.MissionEndQuantity";
         $stmtu = $this->cont->prepare($sqlu);
         $statusu = $stmtu->execute();
-        $sql = "SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T2.`StartTime`,T1.`MissionEndTime`,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
+        $sql = "SELECT T1.`MissionID`,T1.`MissionName`,T1.`MissionPoint`,T2.`StartTime`,T2.`EndTime`,T2.`RefreshTime`,T1.`MissionPeriod`,T1.`MissionPeriodList`,
             T2.`RowID`,T2.LastFinishTime,T2.FinishQuantity,T1.MissionEndQuantity,T2.Status
             FROM `missionsystem_missionlist` T1 
                 LEFT JOIN `missionsystem_finishstatus` T2 ON T1.MissionID=T2.MissionID 
@@ -268,6 +290,56 @@ class SingleplayerModel extends Model {
         $stmt = $this->cont->prepare($sql);
         $status = $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    function FinishMission($ID){
+        
+        $this->cont->beginTransaction();
+        $sql = "UPDATE `missionsystem_finishstatus` SET `LastFinishTime` = CURRENT_TIMESTAMP, `FinishQuantity` = FinishQuantity+1, `Status` = '2' WHERE `missionsystem_finishstatus`.`RowID` = '" . $ID . "' and `Status`=0";
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
+        $sqlA = "SELECT `MissionPoint` FROM `missionsystem_missionlist` T1 JOIN `missionsystem_finishstatus` T2 ON T1.`MissionID`=T2.`MissionID` WHERE RowID='" . $ID . "'";
+        $stmtA = $this->cont->prepare($sqlA);
+        $statusA = $stmtA->execute();
+        $MissionPoint = 0;
+        foreach ($stmtA->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $MissionPoint = $row['MissionPoint'];
+        }
+        $sqlB = "UPDATE `missionsystem_players` SET `PlayerScore`=`PlayerScore`+" . $MissionPoint . " WHERE `PlayerID`= '" . $_SESSION['PlayerID'] . "' ";
+        $stmtB = $this->cont->prepare($sqlB);
+        $statusB = $stmtB->execute();
+        if ($status && $statusB) {
+            $this->cont->commit();
+            $Ajaxstatus = 'true';
+        } else {
+            $this->cont->rollback();
+            $Ajaxstatus = 'false';
+        }
+
+        return $Ajaxstatus;
+    }
+    
+    function UnfinishMission($ID) {
+        $this->cont->beginTransaction();
+        $sql = "UPDATE `missionsystem_finishstatus` SET `FinishQuantity` = FinishQuantity-1,`Status` = '0',`LastFinishTime` = NULL WHERE `RowID`=" . $ID . " and `Status`=2";
+        $stmt = $this->cont->prepare($sql);
+        $status = $stmt->execute();
+        $sqlA = "SELECT `MissionPoint` FROM `missionsystem_missionlist` T1 JOIN `missionsystem_finishstatus` T2 ON T1.`MissionID`=T2.`MissionID` WHERE RowID='" . $ID . "'";
+        $stmtA = $this->cont->prepare($sqlA);
+        $statusA = $stmtA->execute();
+        $MissionPoint = 0;
+        foreach ($stmtA->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $MissionPoint = $row['MissionPoint'];
+        }
+        $sqlB = "UPDATE `missionsystem_players` SET `PlayerScore`=`PlayerScore`-" . $MissionPoint . " WHERE `PlayerID`= '" . $_SESSION['PlayerID'] . "' ";
+        $stmtB = $this->cont->prepare($sqlB);
+        $statusB = $stmtB->execute();
+        if ($status && $statusB) {
+            $this->cont->commit();
+        } else {
+            $this->cont->rollback();
+        }
+        return $status;
     }
 
 }

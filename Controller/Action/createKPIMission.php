@@ -25,7 +25,7 @@ class createKPIMission implements actionPerformed {
                         'MissionID' => $row["MissionID"],
                         'MissionName' => $row["MissionName"],
                         'MissionPoint' => $row["MissionPoint"],
-                        'MissionEndTime' => $row["MissionEndTime"],
+                        'EndTime' => $row["EndTime"],
                         'MissionPeriod' => $row["MissionPeriod"],
                         'LastFinishTime' => $row["LastFinishTime"],
                         'FinishQuantity' => $row["FinishQuantity"],

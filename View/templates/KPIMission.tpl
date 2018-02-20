@@ -4,7 +4,7 @@
         $.ajax({
             type: "POST",
             url: url,
-            data: {RowID: ID,doAction:'Finish'}, // serializes the form's elements.
+            data: {RowID: ID,doAction:'KPIFinish'}, // serializes the form's elements.
             success: function (data)
             {   alert("已變更任務狀態");
                 /*console.log(data);
@@ -27,7 +27,7 @@
         $.ajax({
             type: "POST",
             url: url,
-            data: {RowID: ID,doAction:'Delect'}, // serializes the form's elements.
+            data: {RowID: ID,doAction:'KPIDelect'}, // serializes the form's elements.
             success: function (data)
             {
                 console.log(data);
@@ -46,7 +46,7 @@
         $.ajax({
             type: "POST",
             url: url,
-            data: {RowID: ID,doAction:'Unfinish'}, // serializes the form's elements.
+            data: {RowID: ID,doAction:'KPIUnfinish'}, // serializes the form's elements.
             success: function (data)
             {   alert("已變更任務狀態");
                 //console.log(data);

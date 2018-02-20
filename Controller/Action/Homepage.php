@@ -37,7 +37,6 @@ class HomePage implements actionPerformed {
             $ContentListener = new $Content();
             $MissionContent = $ContentListener->actionPerformed($Event);
         }
-        $PlayerModel = new PlayerModel();
 
         $smarty = new KSmarty();
         $smarty->assign("MissionContent", $MissionContent);

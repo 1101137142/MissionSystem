@@ -78,9 +78,9 @@
     <!--<table class="table table-hover" ID="NotFinishTable">-->
     <table class="table table-hover" ID="MissionTable">
         <tr ><td colspan="2">未完成任務</td><td align=right colspan="6"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#createMission">新增任務</button></td></tr>
-        <tr><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>任務開始時間</td><td align=center>任務截止時間</td><td align=center style="width: 20%">進度條</td><td align=center>功能鍵</td></tr>
+        <tr ><td align=center>任務ID</td><td align=center>專屬ID</td><td align=center>任務名稱</td><td align=center>分數</td><td align=center>任務開始時間</td><td align=center>任務截止時間</td><td align=center style="width: 20%">進度條</td><td align=center>功能鍵</td></tr>
         <{foreach key=key item=item from=$ProcessingMission name=ProcessingMission}>
-        <tr ><td align=center ><{$item.MissionID}></td><td align=center><{$item.RowID}></td><td align=center><{$item.MissionName}></td><td align=center><{$item.MissionPoint}></td>
+        <tr class="openDIV"><td align=center ><{$item.MissionID}></td><td align=center><{$item.RowID}></td><td align=center><{$item.MissionName}></td><td align=center><{$item.MissionPoint}></td>
             <td align=center><{$item.StartTime}></td>
             <td align=center><{$item.MissionEndTime}></td>
             
@@ -112,8 +112,8 @@
                     <span class="sr-only"><{$item3.percentage}>% Complete (success)</span><{$item3.percentage}>%
                 </div></div></td>
             <td align=center>
-                <button id="FinishBt<{$item3.RowID}>" type="button" class="btn btn-success" onclick=FinishMission(<{$item.RowID}>)>完成</button>
-                <button id="DelectBt<{$item3.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item.RowID}>)>刪除</button>
+                <button id="UnfinishBt<{$item3.RowID}>" type="button" class="btn btn-warning" onclick=UnfinishMission(<{$item3.RowID}>)>取消</button>
+                <button id="DelectBt<{$item3.RowID}>" type="button" class="btn btn-danger" onclick=DelectMission(<{$item3.RowID}>)>刪除</button>
             </td></tr>
         <{foreachelse}>
         <tr><td align=center colspan="9">當前沒有任務哦 請先建立任務</td></tr>

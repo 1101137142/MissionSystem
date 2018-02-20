@@ -7,6 +7,15 @@ class MissionAction implements actionPerformed {
         $ID = $_POST["RowID"];
         $doAction=$_POST["doAction"];
         switch($doAction){
+            case 'KPIFinish':
+                return $SingleplayerModel->FinishKPIMission($ID);
+                break;
+            case 'KPIUnfinish':
+                return $SingleplayerModel->UnfinishKPIMission($ID);
+                break;
+            case 'KPIDelect':
+                return $SingleplayerModel->DelectKPIMission($ID);
+                break;
             case 'Finish':
                 return $SingleplayerModel->FinishMission($ID);
                 break;
